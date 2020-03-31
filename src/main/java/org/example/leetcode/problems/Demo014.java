@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @Description TODO
+ * @Description 最长公共前缀  https://leetcode-cn.com/problems/longest-common-prefix/
  * @Author Marcoo
  * @Date 2020/3/30 21:47
  */
@@ -16,6 +16,11 @@ public class Demo014 {
         System.out.println(longestCommonPrefix(strs));
     }
 
+    /**
+     * 水平扫描
+     * @param strs
+     * @return
+     */
     public static String longestCommonPrefix(String[] strs) {
         if (strs.length == 0) {
             return "";
