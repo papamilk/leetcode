@@ -11,9 +11,58 @@ public class Demo289 {
     public static void main(String[] args) {
 //        int[][] board = {{0, 1, 0}, {0, 0, 1}, {1, 1, 1}, {0, 0, 0}};
         int[][] board = {{0,0,0,0,0,0}, {0,0,0,0,0,0}, {0,0,1,1,1,0}, {0,1,1,1,0,0}, {0,0,0,0,0,0}, {0,0,0,0,0,0}};
-        gameOfLife(board);
+//        gameOfLife(board);
+        gameOfLifeV2(board);
         for (int i = 0; i < board.length; i++) {
             System.out.println(Arrays.toString(board[i]));
+        }
+    }
+
+    /**
+     * 通过分析状态，可以实现原地更新
+     * @param board
+     */
+    public static void gameOfLifeV2(int[][] board) {
+        if (board == null || board.length == 0) {
+            return;
+        }
+
+        int[][] directions = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
+        int xLen = board.length;
+        int yLen = board[0].length;
+        for (int i = 0; i < xLen; i++) {
+            search: for (int j = 0; j < yLen; j++) {
+                int live = 0;
+               for (int[] direction : directions) {
+                    int x = i + direction[0];
+                    int y = j + direction[1];
+                    if (inArea(x, y, xLen, yLen) && (board[x][y] & 1) == 1) {
+                        live++;
+                        if (live > 3 && (board[i][j] & 1) == 1) {
+                            // 如果活细胞周围八个位置有超过三个活细胞，则该位置活细胞死亡
+                            board[i][j] = 1;
+                            continue search;
+                        }
+                    }
+                }
+                if ((board[i][j] & 1) == 1) {
+                    if (live < 2) {
+                        // 如果活细胞周围八个位置的活细胞数少于两个，则该位置活细胞死亡
+                        board[i][j] = 1;
+                    } else {
+                        board[i][j] += 2;
+                    }
+                } else if (live == 3) {
+                    // 如果死细胞周围正好有三个活细胞，则该位置死细胞复活
+                    board[i][j] += 2;
+                }
+            }
+        }
+
+        for (int i = 0; i < xLen; i++) {
+            for (int j = 0; j < yLen; j++) {
+                board[i][j] = board[i][j] >> 1;
+            }
         }
     }
 

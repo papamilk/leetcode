@@ -9,23 +9,116 @@ import java.util.Arrays;
  */
 public class Demo912 {
     public static void main(String[] args) {
-//        int[] nums = {5,2,3,1};
-        int[] nums = {5,1,1,2,0,0};
+        int[] nums = {5,2,3,1};
+//        int[] nums = {-2, 3, -5};
+//        int[] nums = {5,1,1,2,0,0};
 //        System.out.println(Arrays.toString(bubbleSort(nums)));
 //        System.out.println(Arrays.toString(selectSort(nums)));
 //        System.out.println(Arrays.toString(insertSort(nums)));
 //        System.out.println(Arrays.toString(shellSort(nums)));
 //        System.out.println(Arrays.toString(mergeSortV1(nums)));
 //        System.out.println(Arrays.toString(mergeSortV2(nums)));
-        System.out.println(Arrays.toString(quickSort(nums)));
+//        System.out.println(Arrays.toString(quickSort(nums)));
+//        System.out.println(Arrays.toString(heapSort(nums)));
+        System.out.println(Arrays.toString(countSort(nums)));
     }
 
+    /**
+     * 计数排序，一种以空间换时间的排序方法，速度很快，具有线性时间复杂度，前提条件是需要知道排序数组的数值范围。
+     *
+     * 思想：对每一个元素 x ，确定小于 x 的元素个数。利用这一信息，就可以直接把 x 放到它在输出数组的位置上。例如有 17 个元素小
+     * 于 x ，那么 x 就应该放到数组的第 18 个位置上。
+     *
+     * 时间复杂度：O(n)
+     *
+     * 空间复杂度：O(n)
+     *
+     * 排序性质：稳定的外排序
+     * @param nums
+     * @return
+     */
+    public static int[] countSort(int[] nums) {
+        if (nums == null || nums.length < 2) {
+            return nums;
+        }
+
+        // 确定数值范围，题目给出了 -50000 <= nums[i] <= 50000 的条件
+        int offset = 50000;
+        int size = 2 * offset + 1;
+        int[] count = new int[size];
+        // 统计原数组数值
+        for (int num : nums) {
+            count[num + offset]++;
+        }
+
+        // 确定每个数字的正确位置
+        for (int i = 1; i < size; i++) {
+            count[i] = count[i] + count[i - 1];
+        }
+
+        // 将数字放到正确的位置
+        int[] temp = new int[nums.length];
+        for (int i = nums.length - 1; i >= 0; i--) {
+            int countIndex = nums[i] + offset;
+            int valueIndex = count[countIndex] - 1;
+            temp[valueIndex] = nums[i];
+            count[countIndex]--;
+        }
+        return temp;
+    }
+
+    /**
+     * 堆排序
+     *
+     * 思想：通过堆这种数据结构，实现排序。每次从最大堆堆顶获取最大的元素，与堆尾的元素进行交换，从而将大的元素移到序列的末尾，
+     * 接着重建堆，再一次将堆顶的元素与堆尾倒数第二个元素交换。如此循环，完成排序。
+     *
+     * 时间复杂度：O(nlogn)
+     *
+     * 空间复杂度：O(1)
+     *
+     * 排序性质：不稳定的内排序
+     * @param nums
+     * @return
+     */
     public static int[] heapSort(int[] nums) {
         if (nums == null || nums.length < 2) {
             return nums;
         }
+        int length = nums.length;
+        // 构建最大堆
+        for (int i = (length / 2) - 1; i >= 0; i--) {
+            maxHeapify(nums, i, length - 1);
+        }
+        for (int i = length - 1; i > 0 ; i--) {
+            swap(nums, 0, i);
+            maxHeapify(nums, 0, i - 1);
+        }
         return nums;
+    }
 
+    public static void swap(int[] nums, int m, int n) {
+        int temp = nums[m];
+        nums[m] = nums[n];
+        nums[n] = temp;
+    }
+
+    public static void maxHeapify(int[] nums, int parent, int size) {
+        int largest = parent;
+        int left = parent << 1;
+        int right = (parent << 1) + 1;
+        if (left <= size && nums[left] > nums[parent]) {
+            largest = left;
+        }
+        if (right <= size && nums[right] > nums[largest]) {
+            largest = right;
+        }
+        if (largest != parent) {
+            int temp = nums[largest];
+            nums[largest] = nums[parent];
+            nums[parent] = temp;
+            maxHeapify(nums, largest, size);
+        }
     }
 
     /**
