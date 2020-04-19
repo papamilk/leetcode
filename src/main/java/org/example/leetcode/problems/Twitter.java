@@ -1,11 +1,11 @@
 package org.example.leetcode.problems;
 
-import org.omg.CORBA.INTERNAL;
 
 import java.util.*;
 
 /**
  * @Description 设计推特    https://leetcode-cn.com/problems/design-twitter/
+ * 思路：哈希表 + 链表
  * @Author Marcoo
  * @Date 2020/4/13 19:36
  */
