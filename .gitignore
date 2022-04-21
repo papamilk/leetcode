@@ -6,3 +6,8 @@
 *.iml
 out
 gen
+/.idea
+/target/
+/.gitignore
+/patrol-admin/target/
+/.idea/
