@@ -41,6 +41,5 @@ public class Demo206 {
             pre = node;
         }
         return cur;
-
     }
 }
