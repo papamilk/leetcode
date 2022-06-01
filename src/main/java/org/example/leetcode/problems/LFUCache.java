@@ -155,7 +155,7 @@ public class LFUCache {
     /**
      * 双向链表节点
      */
-    public static class ListNode {
+    private static class ListNode {
         int key;
         // 需要被返回的值
         int value;

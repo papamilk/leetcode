@@ -10,7 +10,7 @@ import org.example.leetcode.common.ListNode;
 public class Demo025 {
 
     public static void main(String[] args) {
-        int[] arr = {1, 2, 3, 4, 5};
+        int[] arr = {1};
         ListNode head = new ListNode(arr[0]);
         ListNode cur = head;
         for (int i = 1; i < arr.length; i++) {
@@ -28,44 +28,38 @@ public class Demo025 {
     }
 
     public static ListNode reverseKGroup(ListNode head, int k) {
-        ListNode curHead = head;
-        ListNode pre = head;
-        ListNode firstNode = head;
-        ListNode curTail = null;
-        boolean isHead = true;
-        int count = 0;
-        while (pre != null) {
-            pre = pre.next;
-            count++;
-            if (count == k) {
-                if (isHead) {
-                    firstNode = reverseList(curHead, k, pre);
-                    isHead = false;
-                } else {
-                    curTail.next = reverseList(curHead, k, pre);
-                }
-                curTail = curHead;
-                curHead = pre;
-                count = 0;
-            }
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode pre = dummy;
 
+        while (head != null) {
+            ListNode tail = pre;
+            for (int i = 0; i < k; i++) {
+                tail = tail.next;
+                if (tail == null) {
+                    return dummy.next;
+                }
+            }
+            ListNode[] reverse = reverseList(head, tail);
+            head = reverse[0];
+            tail = reverse[1];
+            pre.next = head;
+            pre = tail;
+            head = tail.next;
         }
-        return firstNode;
+        return dummy.next;
     }
 
 
-    public static ListNode reverseList(ListNode head, int k, ListNode tail) {
-        // 下一段链表赋值给head.next
-        ListNode cur = tail;
-        ListNode pre = head;
-        int count = 0;
-        while (pre != null && count < k) {
-            ListNode node = pre.next;
-            pre.next = cur;
-            cur = pre;
-            pre = node;
-            count++;
+    public static ListNode[] reverseList(ListNode head, ListNode tail) {
+        ListNode prev = tail.next;
+        ListNode cur = head;
+        while (prev != tail) {
+            ListNode next = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = next;
         }
-        return cur;
+        return new ListNode[]{tail, head};
     }
 }
