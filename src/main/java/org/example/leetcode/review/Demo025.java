@@ -1,16 +1,16 @@
-package org.example.leetcode.problems;
+package org.example.leetcode.review;
 
 import org.example.leetcode.common.ListNode;
 
 /**
  * @author Marcoo
- * @description 25. K 个一组翻转链表   https://leetcode.cn/problems/reverse-nodes-in-k-group/
- * @date 2022-05-15 9:07
+ * @description
+ * @date 2022-06-06 20:37
  */
 public class Demo025 {
 
     public static void main(String[] args) {
-        int[] arr = {1};
+        int[] arr = {1, 2};
         ListNode head = new ListNode(arr[0]);
         ListNode cur = head;
         for (int i = 1; i < arr.length; i++) {
@@ -31,27 +31,27 @@ public class Demo025 {
         ListNode dummy = new ListNode(0);
         dummy.next = head;
         ListNode pre = dummy;
-
-        while (head != null) {
-            ListNode tail = pre;
+        while (pre.next != null) {
+            ListNode subTail = pre;
             for (int i = 0; i < k; i++) {
-                tail = tail.next;
-                if (tail == null) {
+                subTail = subTail.next;
+                if (subTail == null) {
                     return dummy.next;
                 }
             }
-            ListNode[] reverse = reverseList(head, tail);
+            ListNode nexNext = subTail.next;
+            ListNode[] reverse = reverseGroup(head, subTail);
             head = reverse[0];
-            tail = reverse[1];
+            subTail = reverse[1];
             pre.next = head;
-            pre = tail;
-            head = tail.next;
+            subTail.next = nexNext;
+            pre = subTail;
+            head = nexNext;
         }
         return dummy.next;
     }
 
-
-    public static ListNode[] reverseList(ListNode head, ListNode tail) {
+    public static ListNode[] reverseGroup(ListNode head, ListNode tail) {
         ListNode prev = tail.next;
         ListNode cur = head;
         while (prev != tail) {
